@@ -29,6 +29,38 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        if event.type == pygame.MOUSEBUTTONUP and not gameover:
+            x,y = pygame.mouse.get_pos()
+            col = int(x/DIM_SQUARE)
+            row = int(y/DIM_SQUARE)
+            if col < 8:
+                if phase == 1:
+                    can_choose, piece = board.choose_piece(col, row, turn, screen)
+                    if can_choose:
+                        phase = 2
+                else: #phase == 2
+                    phase = 1
+                    if board.move_piece(piece, col, row, screen, turn):
+                        if board.is_checkmate(turn):
+                            gameover = True
+                            print("Player", turn, "wins")
+                        else:
+                            if turn == WHITE:
+                                turn = BLACK
+                            else:
+                                turn = WHITE
+
+                            if board.is_draw(turn):
+                                gameover = True
+                                print("DRAW")
+            #board.show_board()
+    pygame.display.update()
+
+"""
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
         if event.type == pygame.MOUSEBUTTONUP and not gameover and turn == WHITE:
             x,y = pygame.mouse.get_pos()
             col = int(x/DIM_SQUARE)
@@ -73,5 +105,5 @@ while running:
 
             #board.show_board()
     pygame.display.update()
-
+"""
 pygame.quit() 
